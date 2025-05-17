@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 
 // Expanded question pool with difficulty levels
-const questions = [
+const allQuestions = [
   // Difficulty 1 (Easy)
   { question: "What is 2 + 2?", options: ["3", "4", "5", "6"], answer: "4", difficulty: 1 },
   { question: "What is 5 x 6?", options: ["11", "30", "56", "60"], answer: "30", difficulty: 1 },
@@ -29,6 +29,7 @@ const questions = [
 ];
 
 function App() {
+  const [questions, setQuestions] = useState([]);
   const [currentDifficulty, setCurrentDifficulty] = useState(1);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -43,14 +44,16 @@ function App() {
   const [selectedOption, setSelectedOption] = useState(null);
   const [showCorrectAnswer, setShowCorrectAnswer] = useState(false);
   const [confetti, setConfetti] = useState(false);
+  const [perfectScore, setPerfectScore] = useState(false);
+  const [currentQuizQuestions, setCurrentQuizQuestions] = useState([]);
   
   const maxDifficulty = 4;
 
   // Initialize the quiz
   useEffect(() => {
     setStartTime(new Date());
-    // Shuffle questions on initial load
-    shuffleQuestions();
+    // Generate initial questions set
+    initializeQuestions();
     
     // Set title and favicon dynamically
     document.title = "Adaptive Quiz | Test Your Knowledge";
@@ -73,13 +76,21 @@ function App() {
     }
   }, [confetti]);
 
+  // Initialize and shuffle questions
+  const initializeQuestions = () => {
+    let newQuestions = [...allQuestions];
+    shuffleQuestions(newQuestions);
+    setQuestions(newQuestions);
+    setCurrentQuizQuestions(newQuestions);
+  };
+
   // Shuffle the questions to avoid repetitive patterns
-  const shuffleQuestions = () => {
-    // Implementation happens on the original array, no need to modify state
-    for (let i = questions.length - 1; i > 0; i--) {
+  const shuffleQuestions = (questionsArray) => {
+    for (let i = questionsArray.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [questions[i], questions[j]] = [questions[j], questions[i]];
+      [questionsArray[i], questionsArray[j]] = [questionsArray[j], questionsArray[i]];
     }
+    return questionsArray;
   };
 
   // Filter questions by current difficulty
@@ -161,6 +172,9 @@ function App() {
       // Check if this is the 10th question to end the quiz
       if (questionCount >= 9) {
         setEndTime(new Date());
+        // Check if all answers were correct
+        const allCorrect = performanceHistory.every(item => item.correct) && correct;
+        setPerfectScore(allCorrect);
         setShowResult(true);
       } else {
         // Go to next question
@@ -177,13 +191,23 @@ function App() {
     setShowResult(false);
     setConsecutiveCorrect(0);
     setConsecutiveIncorrect(0);
-    setPerformanceHistory([]);
     setStartTime(new Date());
     setEndTime(null);
     setSelectedOption(null);
     setShowCorrectAnswer(false);
     setConfetti(false);
-    shuffleQuestions();
+    
+    // If the user got all questions correct, generate new questions
+    // Otherwise, keep the same questions for another try
+    if (perfectScore) {
+      let newQuestions = [...allQuestions];
+      shuffleQuestions(newQuestions);
+      setQuestions(newQuestions);
+      setCurrentQuizQuestions(newQuestions);
+    }
+    
+    // Reset performance history
+    setPerformanceHistory([]);
   };
 
   // Get a color representing the current difficulty
@@ -298,7 +322,15 @@ function App() {
             ))}
           </div>
           
-          <button className="restart-btn" onClick={restartQuiz}>Play Again</button>
+          <button className="restart-btn" onClick={restartQuiz}>
+            {perfectScore ? "Start New Quiz" : "Try Again"}
+          </button>
+          
+          {!perfectScore && (
+            <p className="retry-message">
+              Answer all questions correctly to unlock new questions!
+            </p>
+          )}
         </div>
       </div>
     );

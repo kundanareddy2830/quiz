@@ -401,6 +401,19 @@ body {
   animation: confettiFall linear forwards;
 }
 
+/* Retry message styling */
+.retry-message {
+  margin-top: 20px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  font-style: italic;
+  color: #64ffda;
+  border-left: 3px solid #64ffda;
+  animation: fadeInUp 0.5s ease-out;
+  text-align: center;
+}
+
 /* Responsive styling */
 @media (max-width: 600px) {
   .quiz-header {
