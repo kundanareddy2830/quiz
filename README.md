@@ -1,70 +1,48 @@
-# Getting Started with Create React App
+# Adaptive Quiz App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React-based quiz application that intelligently adapts question difficulty based on user performance.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Adaptive Difficulty**: Questions dynamically adjust in difficulty based on performance
+- **Performance Tracking**: Detailed metrics and history of answers
+- **Visual Indicators**: Color-coded difficulty levels for intuitive user experience
+- **Sophisticated Algorithm**: Increases or decreases difficulty based on consecutive correct/incorrect answers
+- **Question Variety**: Pool of questions across 4 difficulty levels (Easy, Medium, Hard, Expert)
+- **Score Weighting**: Higher scores for correctly answering more difficult questions
 
-### `npm start`
+## How It Works
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. The quiz starts with easy questions (difficulty level 1)
+2. Correctly answering questions increases the difficulty level
+3. Incorrectly answering questions may decrease the difficulty level
+4. The quiz ends after 10 questions
+5. Final results show score, accuracy, average difficulty, and question history
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Technical Details
 
-### `npm test`
+- Built with React using functional components and hooks
+- Uses useState and useEffect for state management
+- Implements a shuffle algorithm for randomizing questions
+- Responsive design for both desktop and mobile devices
+- Custom CSS for modern visual styling
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## How to Run
 
-### `npm run build`
+1. Clone the repository
+2. Install dependencies with `npm install`
+3. Run the development server with `npm start`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Future Enhancements
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Potential improvements for future versions:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Adding more question categories (e.g., Science, History, Literature)
+- User accounts and persistent score tracking
+- Timed questions with bonus points
+- Difficulty level selection at the start
+- More sophisticated adaptive algorithms
 
-### `npm run eject`
+## License
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+MIT
