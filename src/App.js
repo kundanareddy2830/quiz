@@ -39,6 +39,10 @@ function App() {
   const [performanceHistory, setPerformanceHistory] = useState([]);
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
+  const [animateQuestion, setAnimateQuestion] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [showCorrectAnswer, setShowCorrectAnswer] = useState(false);
+  const [confetti, setConfetti] = useState(false);
   
   const maxDifficulty = 4;
 
@@ -47,7 +51,27 @@ function App() {
     setStartTime(new Date());
     // Shuffle questions on initial load
     shuffleQuestions();
+    
+    // Set title and favicon dynamically
+    document.title = "Adaptive Quiz | Test Your Knowledge";
   }, []);
+  
+  // Animation effect when moving to a new question
+  useEffect(() => {
+    if (questionCount > 0) {
+      setAnimateQuestion(true);
+      const timer = setTimeout(() => setAnimateQuestion(false), 500);
+      return () => clearTimeout(timer);
+    }
+  }, [questionCount]);
+
+  // Confetti effect for correct answers on higher difficulties
+  useEffect(() => {
+    if (confetti) {
+      const timer = setTimeout(() => setConfetti(false), 2500);
+      return () => clearTimeout(timer);
+    }
+  }, [confetti]);
 
   // Shuffle the questions to avoid repetitive patterns
   const shuffleQuestions = () => {
@@ -90,7 +114,19 @@ function App() {
   };
 
   const handleAnswer = (option) => {
+    // Prevent multiple selections during animation
+    if (selectedOption !== null) return;
+    
     const correct = option === question.answer;
+    
+    // Display visual feedback before moving to next question
+    setSelectedOption(option);
+    setShowCorrectAnswer(true);
+    
+    // If correct answer at higher difficulties, show confetti
+    if (correct && currentDifficulty >= 3) {
+      setConfetti(true);
+    }
     
     // Track this question's result
     setPerformanceHistory([
@@ -103,23 +139,34 @@ function App() {
       }
     ]);
     
-    setQuestionCount(questionCount + 1);
-    
+    // Update score
     if (correct) {
       setScore(score + currentDifficulty); // Score based on difficulty
-      adjustDifficulty(true);
-    } else {
-      adjustDifficulty(false);
     }
     
-    // Check if this is the 10th question to end the quiz
-    if (questionCount >= 9) {
-      setEndTime(new Date());
-      setShowResult(true);
-    } else {
-      // Go to next question
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-    }
+    // Set timeout to show the correct answer briefly
+    setTimeout(() => {
+      setQuestionCount(questionCount + 1);
+      
+      if (correct) {
+        adjustDifficulty(true);
+      } else {
+        adjustDifficulty(false);
+      }
+      
+      // Reset for next question
+      setSelectedOption(null);
+      setShowCorrectAnswer(false);
+      
+      // Check if this is the 10th question to end the quiz
+      if (questionCount >= 9) {
+        setEndTime(new Date());
+        setShowResult(true);
+      } else {
+        // Go to next question
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+      }
+    }, 1000);
   };
 
   const restartQuiz = () => {
@@ -133,6 +180,9 @@ function App() {
     setPerformanceHistory([]);
     setStartTime(new Date());
     setEndTime(null);
+    setSelectedOption(null);
+    setShowCorrectAnswer(false);
+    setConfetti(false);
     shuffleQuestions();
   };
 
@@ -177,6 +227,21 @@ function App() {
     };
   };
 
+  // Get button class based on whether it's selected and correct
+  const getButtonClass = (option) => {
+    if (!showCorrectAnswer) return "option-btn";
+    
+    if (option === question.answer) {
+      return "option-btn correct-answer";
+    }
+    
+    if (option === selectedOption && option !== question.answer) {
+      return "option-btn wrong-answer";
+    }
+    
+    return "option-btn";
+  };
+
   if (!question && !showResult) {
     return <div className="App"><h2>Loading questions...</h2></div>;
   }
@@ -188,13 +253,29 @@ function App() {
       <div className="App">
         <div className="result-container">
           <h2>Quiz Complete!</h2>
-          <p className="score">Your score: <strong>{score}</strong></p>
+          <div className="final-score">
+            <div className="score-circle">
+              <span>{score}</span>
+              <small>points</small>
+            </div>
+          </div>
           
           <div className="metrics">
             <h3>Performance Metrics</h3>
-            <p>Accuracy: <strong>{metrics.accuracy.toFixed(1)}%</strong></p>
-            <p>Average Difficulty: <strong>{metrics.avgDifficulty.toFixed(2)}</strong></p>
-            <p>Time Spent: <strong>{metrics.timeSpent} seconds</strong></p>
+            <div className="metrics-grid">
+              <div className="metric-item">
+                <span className="metric-value">{metrics.accuracy.toFixed(1)}%</span>
+                <span className="metric-label">Accuracy</span>
+              </div>
+              <div className="metric-item">
+                <span className="metric-value">{metrics.avgDifficulty.toFixed(2)}</span>
+                <span className="metric-label">Avg. Difficulty</span>
+              </div>
+              <div className="metric-item">
+                <span className="metric-value">{metrics.timeSpent}</span>
+                <span className="metric-label">Seconds</span>
+              </div>
+            </div>
           </div>
           
           <h3>Question History</h3>
@@ -208,13 +289,16 @@ function App() {
                 }}>
                   {item.difficulty}
                 </span>
-                <p>{item.question}</p>
-                <p>Your answer: <strong>{item.answer}</strong> ({item.correct ? "Correct" : "Incorrect"})</p>
+                <p>{index + 1}. {item.question}</p>
+                <p>Your answer: <strong>{item.answer}</strong> {item.correct ? 
+                  <span className="correct-text">✓ Correct</span> : 
+                  <span className="incorrect-text">✗ Incorrect</span>}
+                </p>
               </div>
             ))}
           </div>
           
-          <button className="restart-btn" onClick={restartQuiz}>Restart Quiz</button>
+          <button className="restart-btn" onClick={restartQuiz}>Play Again</button>
         </div>
       </div>
     );
@@ -222,8 +306,25 @@ function App() {
 
   return (
     <div className="App">
-      <h2>Adaptive Quiz App</h2>
-      <div className="quiz-container">
+      {confetti && <div className="confetti-container">
+        {Array(50).fill(null).map((_, i) => (
+          <div 
+            key={i} 
+            className="confetti" 
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `-10px`,
+              backgroundColor: `hsl(${Math.random() * 360}, 100%, 50%)`,
+              transform: `rotate(${Math.random() * 360}deg)`,
+              animationDuration: `${1 + Math.random() * 2}s`,
+              animationDelay: `${Math.random() * 0.5}s`
+            }}
+          />
+        ))}
+      </div>}
+      
+      <h2>Adaptive Quiz</h2>
+      <div className={`quiz-container ${animateQuestion ? 'fade-in' : ''}`}>
         <div className="quiz-header">
           <div className="difficulty-indicator" style={{ backgroundColor: getDifficultyColor() }}>
             <span>Difficulty: {getDifficultyName()}</span>
@@ -238,7 +339,12 @@ function App() {
           <h3>{question.question}</h3>
           <div className="options-container">
             {question.options.map((option, idx) => (
-              <button key={idx} className="option-btn" onClick={() => handleAnswer(option)}>
+              <button 
+                key={idx} 
+                className={getButtonClass(option)} 
+                onClick={() => handleAnswer(option)}
+                disabled={selectedOption !== null}
+              >
                 {option}
               </button>
             ))}

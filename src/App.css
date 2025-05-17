@@ -1,20 +1,57 @@
-/* Main App styling */
+/* Main App styling with background image */
+body {
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1614332287897-cdc485fa562d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .App {
   text-align: center;
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #333;
+  color: #f5f5f5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-/* Quiz container */
+.App h2 {
+  color: #fff;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  animation: fadeInDown 0.8s ease-out;
+}
+
+/* Quiz container with glass morphism effect */
 .quiz-container {
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  padding: 25px;
   margin-top: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: fadeIn 1s ease-out;
+  transition: all 0.3s ease;
+}
+
+.quiz-container:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  transform: translateY(-5px);
+}
+
+/* Animation for question transitions */
+.quiz-container.fade-in {
+  animation: fadeInQuestionRight 0.5s ease forwards;
 }
 
 /* Quiz header with difficulty and progress info */
@@ -22,18 +59,23 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #eee;
+  margin-bottom: 25px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   padding-bottom: 15px;
 }
 
-/* Difficulty indicator styling */
+/* Difficulty indicator styling with glow effect */
 .difficulty-indicator {
-  padding: 8px 15px;
-  border-radius: 20px;
+  padding: 10px 18px;
+  border-radius: 25px;
   color: white;
   font-weight: bold;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.9rem;
+  animation: pulse 2s infinite;
+  transition: all 0.3s ease;
 }
 
 /* Progress information styling */
@@ -41,20 +83,28 @@
   display: flex;
   flex-direction: column;
   text-align: right;
+  color: #fff;
+  font-weight: 500;
 }
 
 .progress-info span {
-  margin: 2px 0;
+  margin: 4px 0;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 /* Question container */
 .question-container {
-  margin: 20px 0;
+  margin: 25px 0;
+  animation: fadeInUp 0.8s ease-out;
 }
 
 .question-container h3 {
-  font-size: 1.4rem;
-  margin-bottom: 25px;
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+  color: #fff;
+  line-height: 1.5;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+  padding: 0 10px;
 }
 
 /* Options container */
@@ -62,80 +112,230 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 15px;
-  margin-top: 20px;
+  margin-top: 25px;
 }
 
-/* Option button styling */
+/* Option button styling with hover effects */
 .option-btn {
-  background-color: #f8f9fa;
-  border: 2px solid #e9ecef;
-  border-radius: 8px;
-  padding: 15px;
-  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 18px;
+  font-size: 1.1rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   text-align: left;
-  min-height: 60px;
+  min-height: 70px;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-.option-btn:hover {
-  background-color: #e9ecef;
-  transform: translateY(-2px);
+.option-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1));
+  transition: width 0.4s ease;
+  z-index: 0;
+}
+
+.option-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-5px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.option-btn:hover:not(:disabled)::before {
+  width: 100%;
+}
+
+.option-btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Answer feedback classes */
+.option-btn.correct-answer {
+  background: rgba(76, 175, 80, 0.3);
+  border-color: #4CAF50;
+  box-shadow: 0 0 20px rgba(76, 175, 80, 0.5);
+  animation: correctPulse 1s;
+}
+
+.option-btn.wrong-answer {
+  background: rgba(244, 67, 54, 0.3);
+  border-color: #F44336;
+  box-shadow: 0 0 20px rgba(244, 67, 54, 0.5);
+  animation: wrongShake 0.5s;
+}
+
+.option-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
 /* Results container */
 .result-container {
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  padding: 30px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  padding: 35px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  animation: scaleIn 0.8s ease-out;
 }
 
-.score {
-  font-size: 1.5rem;
-  margin: 20px 0;
+/* Final score display with circle */
+.final-score {
+  display: flex;
+  justify-content: center;
+  margin: 30px 0;
+}
+
+.score-circle {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+  animation: pulse 3s infinite;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.score-circle span {
+  font-size: 3.5rem;
+  font-weight: bold;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.score-circle small {
+  font-size: 1rem;
+  opacity: 0.8;
+  margin-top: -5px;
 }
 
 /* Performance metrics styling */
 .metrics {
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  padding: 15px;
-  margin: 20px 0;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 25px 0;
   text-align: left;
+  border-left: 4px solid #64ffda;
+  animation: fadeInRight 0.8s ease-out;
+}
+
+.metrics h3 {
+  color: #64ffda;
+  margin-top: 0;
+}
+
+/* Metrics grid for better visual arrangement */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.metric-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.metric-value {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.metric-label {
+  font-size: 0.9rem;
+  opacity: 0.8;
 }
 
 /* Question history styling */
 .history {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin: 20px 0;
+  gap: 15px;
+  margin: 25px 0;
   max-height: 400px;
   overflow-y: auto;
   padding-right: 10px;
+  padding-left: 5px;
+  animation: fadeInUp 1s ease-out;
+}
+
+/* Custom scrollbar for history */
+.history::-webkit-scrollbar {
+  width: 8px;
+}
+
+.history::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.history::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
 }
 
 /* Individual history item */
 .history-item {
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  padding: 15px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 18px;
   text-align: left;
   position: relative;
   border-left: 4px solid transparent;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeIn 0.6s ease-out;
 }
 
 .history-item.correct {
   border-left-color: #4CAF50;
+  box-shadow: 0 0 15px rgba(76, 175, 80, 0.2);
 }
 
 .history-item.incorrect {
   border-left-color: #F44336;
+  box-shadow: 0 0 15px rgba(244, 67, 54, 0.2);
+}
+
+.history-item:hover {
+  transform: translateX(5px);
 }
 
 .history-item p {
   margin: 5px 0;
+}
+
+/* Answer feedback text */
+.correct-text {
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+.incorrect-text {
+  color: #F44336;
+  font-weight: bold;
 }
 
 /* Difficulty badge in history */
@@ -143,32 +343,62 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  width: 25px;
-  height: 25px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
   font-weight: bold;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
 /* Restart button */
 .restart-btn {
-  background-color: #007bff;
+  background: linear-gradient(45deg, #00b0ff, #2979ff);
   color: white;
   border: none;
-  padding: 12px 24px;
-  border-radius: 25px;
-  font-size: 1.1rem;
+  padding: 15px 30px;
+  border-radius: 30px;
+  font-size: 1.2rem;
   cursor: pointer;
-  transition: background-color 0.2s ease;
-  margin-top: 20px;
+  transition: all 0.3s ease;
+  margin-top: 30px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
+  font-weight: bold;
+  animation: fadeInUp 1s ease-out;
 }
 
 .restart-btn:hover {
-  background-color: #0056b3;
+  background: linear-gradient(45deg, #2979ff, #00b0ff);
+  box-shadow: 0 8px 25px rgba(0, 123, 255, 0.6);
+  transform: translateY(-3px);
+}
+
+.restart-btn:active {
+  transform: translateY(0);
+}
+
+/* Confetti animation */
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  animation: confettiFall linear forwards;
 }
 
 /* Responsive styling */
@@ -176,7 +406,7 @@
   .quiz-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
+    gap: 15px;
   }
   
   .progress-info {
@@ -185,5 +415,133 @@
   
   .options-container {
     grid-template-columns: 1fr;
+  }
+  
+  .App h2 {
+    font-size: 2rem;
+  }
+  
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from { 
+    opacity: 0; 
+    transform: translateY(-20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from { 
+    opacity: 0; 
+    transform: translateX(-20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from { 
+    opacity: 0; 
+    transform: translateX(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInQuestionRight {
+  0% { 
+    opacity: 0; 
+    transform: translateX(50px);
+  }
+  100% { 
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from { 
+    opacity: 0; 
+    transform: scale(0.9);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes correctPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(76, 175, 80, 0.7);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes wrongShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20%, 60% {
+    transform: translateX(-5px);
+  }
+  40%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(-10px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
   }
 }
