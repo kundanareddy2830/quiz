@@ -51,10 +51,10 @@ const allQuestions = [
 ];
 
 // Audio files for sound effects
-const correctSound = new Audio("https://assets.mixkit.co/active_storage/sfx/2005/2005-preview.mp3");
-const incorrectSound = new Audio("https://assets.mixkit.co/active_storage/sfx/2006/2006-preview.mp3");
-const tickSound = new Audio("https://assets.mixkit.co/active_storage/sfx/1071/1071-preview.mp3");
-const confettiSound = new Audio("https://assets.mixkit.co/active_storage/sfx/1663/1663-preview.mp3"); // Celebration sound for confetti
+const correctSound = new Audio("https://www.soundjay.com/buttons/sounds/button-09.mp3"); // Clear positive click
+const incorrectSound = new Audio("https://www.soundjay.com/buttons/sounds/button-10.mp3"); // Clear buzzer sound
+const tickSound = new Audio("https://www.soundjay.com/clock/sounds/clock-ticking-4.mp3"); // Clear tick sound
+const confettiSound = new Audio("https://www.soundjay.com/human/sounds/applause-01.mp3"); // Clear celebration sound
 
 // Achievement definitions
 const achievements = [
@@ -128,6 +128,7 @@ function App() {
     if (confetti) {
       // Play confetti celebration sound
       if (soundEnabled) {
+        confettiSound.currentTime = 0; // Reset sound to beginning
         confettiSound.volume = 0.6;
         confettiSound.play().catch(err => console.error("Error playing confetti sound:", err));
       }
@@ -149,6 +150,7 @@ function App() {
     
     // Last 5 seconds, play tick sound
     if (timeRemaining <= 5 && soundEnabled) {
+      tickSound.currentTime = 0; // Reset sound to beginning
       tickSound.volume = 0.3;
       tickSound.play().catch(err => console.error("Error playing sound:", err));
     }
@@ -318,6 +320,7 @@ function App() {
   // Handle timer expired
   const handleTimerExpired = () => {
     if (soundEnabled) {
+      incorrectSound.currentTime = 0; // Reset sound to beginning
       incorrectSound.volume = 0.5;
       incorrectSound.play().catch(err => console.error("Error playing sound:", err));
     }
@@ -371,9 +374,11 @@ function App() {
     // Play sound effect
     if (soundEnabled) {
       if (correct) {
+        correctSound.currentTime = 0; // Reset sound to beginning
         correctSound.volume = 0.5;
         correctSound.play().catch(err => console.error("Error playing sound:", err));
       } else {
+        incorrectSound.currentTime = 0; // Reset sound to beginning
         incorrectSound.volume = 0.5;
         incorrectSound.play().catch(err => console.error("Error playing sound:", err));
       }
