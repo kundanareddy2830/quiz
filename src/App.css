@@ -20,6 +20,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  position: relative;
 }
 
 .App h2 {
@@ -414,6 +415,202 @@ body {
   text-align: center;
 }
 
+/* Start screen styling */
+.start-screen {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  text-align: center;
+  animation: fadeIn 1s ease-out;
+}
+
+.start-screen h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.start-screen p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.category-selector {
+  margin: 30px 0;
+}
+
+.category-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.category-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid transparent;
+  border-radius: 25px;
+  padding: 10px 20px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.category-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-3px);
+}
+
+.category-btn.selected {
+  background: rgba(255, 255, 255, 0.2);
+  font-weight: bold;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+/* Quiz length selector styling */
+.quiz-length-selector {
+  margin: 30px 0;
+}
+
+.quiz-length-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.quiz-length-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid transparent;
+  border-radius: 25px;
+  padding: 10px 20px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.quiz-length-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-3px);
+}
+
+.quiz-length-btn.selected {
+  background: rgba(255, 255, 255, 0.2);
+  font-weight: bold;
+  box-shadow: 0 0 15px rgba(64, 196, 255, 0.5);
+  border-color: #40c4ff;
+}
+
+.start-btn {
+  background: linear-gradient(45deg, #00b0ff, #2979ff);
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  border-radius: 30px;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
+  font-weight: bold;
+}
+
+.start-btn:hover {
+  background: linear-gradient(45deg, #2979ff, #00b0ff);
+  box-shadow: 0 8px 25px rgba(0, 123, 255, 0.6);
+  transform: translateY(-3px);
+}
+
+/* Question category tag */
+.question-category {
+  margin-bottom: 15px;
+}
+
+.question-category span {
+  padding: 5px 12px;
+  border-radius: 15px;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+/* Category tag in history */
+.category-tag {
+  position: absolute;
+  top: 10px;
+  right: 50px;
+  padding: 3px 10px;
+  border-radius: 15px;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+/* Category stats */
+.category-stats {
+  margin-top: 25px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.category-stats h4 {
+  color: #64ffda;
+  margin-bottom: 15px;
+}
+
+.category-stats-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.category-stat-item {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 10px 15px;
+  border-left: 4px solid;
+}
+
+.category-name {
+  width: 100px;
+  font-weight: bold;
+}
+
+.category-accuracy {
+  flex-grow: 1;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0 15px;
+}
+
+.accuracy-bar {
+  height: 100%;
+  border-radius: 4px;
+}
+
+.category-score {
+  font-size: 0.9rem;
+  min-width: 80px;
+  text-align: right;
+}
+
 /* Responsive styling */
 @media (max-width: 600px) {
   .quiz-header {
@@ -436,6 +633,25 @@ body {
   
   .metrics-grid {
     grid-template-columns: 1fr;
+  }
+  
+  .category-stat-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .category-name {
+    width: auto;
+  }
+  
+  .category-accuracy {
+    width: 100%;
+    margin: 5px 0;
+  }
+  
+  .category-score {
+    text-align: left;
   }
 }
 
